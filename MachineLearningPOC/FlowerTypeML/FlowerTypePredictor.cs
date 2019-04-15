@@ -1,8 +1,6 @@
 ﻿using Microsoft.ML;
-using Microsoft.ML.Data;
-using Microsoft.ML.Transforms;
 
-namespace MachineLearningPOC
+namespace MachineLearningPOC.FlowertTypeML
 {
     public class FlowerTypePredictor
     {
@@ -67,10 +65,10 @@ namespace MachineLearningPOC
 
         private IDataView LoadHistoricDataToLearnThePatternsFrom()
         {
-            // Make sure iris-data.txt is copied to the output folder
+            // Make sure the file is copied to the output folder
             IDataView data = dotNetMachineLearningContext
                 .Data
-                .LoadFromTextFile<IrisData>(path: "iris-data.txt", hasHeader: false, separatorChar: ',');
+                .LoadFromTextFile<IrisData>(path: "FlowerTypeML\\iris-data.txt", hasHeader: false, separatorChar: ',');
             return data;
         }
 

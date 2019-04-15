@@ -1,6 +1,6 @@
 ﻿using Microsoft.ML.Data;
 
-namespace MachineLearningPOC
+namespace MachineLearningPOC.FlowertTypeML
 {
     // IrisPrediction is the result returned from prediction operations
     public class IrisPrediction

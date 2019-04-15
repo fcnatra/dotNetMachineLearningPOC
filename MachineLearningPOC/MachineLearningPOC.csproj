@@ -10,7 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="iris-data.txt">
+    <None Update="FlowerTypeML\iris-data.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ForestFiresML\forestfires.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

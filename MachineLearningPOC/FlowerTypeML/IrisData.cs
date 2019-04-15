@@ -1,6 +1,6 @@
 ﻿using Microsoft.ML.Data;
 
-namespace MachineLearningPOC
+namespace MachineLearningPOC.FlowertTypeML
 {
     // STEP 1: Define your data structures
     // IrisData is used to provide training data, and as

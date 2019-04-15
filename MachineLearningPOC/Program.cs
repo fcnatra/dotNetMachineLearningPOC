@@ -1,4 +1,6 @@
 ﻿
+using MachineLearningPOC.FlowertTypeML;
+using MachineLearningPOC.ForestFiresML;
 using System;
 
 namespace MachineLearningPOC
@@ -7,10 +9,13 @@ namespace MachineLearningPOC
     {
         static void Main(string[] args)
         {
-            var predictor = new FlowerTypePredictor();
-            predictor.Predict();
+            var flowerPredictor = new FlowerTypePredictor();
+            flowerPredictor.Predict();
+            Console.WriteLine($"Predicted flower type is: {flowerPredictor.PredictedLabels}");
 
-            Console.WriteLine($"Predicted flower type is: {predictor.PredictedLabels}");
+            var firePredictor = new FirePredictor();
+            firePredictor.Predict();
+            Console.WriteLine($"Predicted humidity is: {firePredictor.PredictedLabels}");
 
             Console.WriteLine("Press any key to exit....");
             Console.ReadLine();
