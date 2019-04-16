@@ -30,8 +30,8 @@ namespace MachineLearningPOC.ForestFiresML
             return dotNetMachineLearningContext.Model.CreatePredictionEngine<ForestFireData, FirePrediction>(model).Predict(
                 new ForestFireData()
                 {
-                    Month = "jun",
-                    RH = 40.0f
+                    Temp = 18f,
+                    RH = 33f
                 });
         }
 
@@ -45,18 +45,20 @@ namespace MachineLearningPOC.ForestFiresML
         {
             // transform your data
             IEstimator<ITransformer> pipeLine = dotNetMachineLearningContext.Transforms.Conversion.MapValueToKey("WeekDay");
-            pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Concatenate("Features", "Month", "RH"));
+            pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Concatenate("Features", "Temp", "RH"));
 
             // add a learner
             pipeLine = pipeLine.AppendCacheCheckpoint(dotNetMachineLearningContext);
 
-            // Add a learning algorithm to the pipeline. e.g.(What type of iris is this?)
-            // Assign numeric values to text in the "Label" column,
+            // Add a learning algorithm to the pipeline.
+            // Assign numeric values to text in the labeled column,
             // because only numbers can be processed during model training.
             pipeLine = pipeLine.Append(dotNetMachineLearningContext.MulticlassClassification.Trainers.SdcaMaximumEntropy(labelColumnName: "WeekDay", featureColumnName: "Features"));
 
             // Convert the Label back into original text (after converting to number in step 3)
-            pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Conversion.MapKeyToValue("PredictedWeekDays"));
+            pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Conversion.MapKeyToValue(
+                outputColumnName: "PredictedWeekDay",
+                inputColumnName: "WeekDay"));
 
             return pipeLine;
         }

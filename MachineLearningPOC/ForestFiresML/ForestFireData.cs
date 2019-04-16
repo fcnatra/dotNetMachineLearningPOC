@@ -59,13 +59,13 @@ namespace MachineLearningPOC.ForestFiresML
         /// temperature in Celsius degrees: 2.2 to 33.30
         /// </summary>
         [LoadColumn(8)]
-        public double Temp { get; set; }
+        public Single Temp { get; set; }
 
         /// <summary>
         /// relative humidity in %: 15.0 to 100
         /// </summary>
         [LoadColumn(9)]
-        public double RH { get; set; }
+        public Single RH { get; set; }
 
         /// <summary>
         /// wind speed in km/h: 0.40 to 9.40 
