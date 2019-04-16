@@ -15,7 +15,7 @@ namespace MachineLearningPOC
 
             var firePredictor = new FirePredictor();
             firePredictor.Predict();
-            Console.WriteLine($"Predicted humidity is: {firePredictor.PredictedLabels}");
+            Console.WriteLine($"Predicted humidity is: {firePredictor.PredictedWeekDays}");
 
             Console.WriteLine("Press any key to exit....");
             Console.ReadLine();

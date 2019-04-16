@@ -9,7 +9,7 @@ namespace MachineLearningPOC.ForestFiresML
     {
         private MLContext dotNetMachineLearningContext;
 
-        public double PredictedLabels { get; set; } = -1;
+        public string PredictedWeekDays { get; set; } = string.Empty;
 
         public void Predict()
         {
@@ -19,7 +19,7 @@ namespace MachineLearningPOC.ForestFiresML
             ITransformer model = Train(trainingDataView, pipeLine);
             FirePrediction prediction = PredictBasedOnTheModel(model);
 
-            this.PredictedLabels = prediction.PredictedLabels;
+            this.PredictedWeekDays = prediction.PredictedWeekDays;
 
         }
 
@@ -31,7 +31,7 @@ namespace MachineLearningPOC.ForestFiresML
                 new ForestFireData()
                 {
                     Month = "jun",
-                    WeekDay = "mon"
+                    RH = 40.0f
                 });
         }
 
@@ -44,8 +44,8 @@ namespace MachineLearningPOC.ForestFiresML
         private IEstimator<ITransformer> SetUpLearningModel()
         {
             // transform your data
-            IEstimator<ITransformer> pipeLine = dotNetMachineLearningContext.Transforms.Conversion.MapValueToKey("RH");
-            pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Concatenate("Features", "Month", "WeekDay"));
+            IEstimator<ITransformer> pipeLine = dotNetMachineLearningContext.Transforms.Conversion.MapValueToKey("WeekDay");
+            pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Concatenate("Features", "Month", "RH"));
 
             // add a learner
             pipeLine = pipeLine.AppendCacheCheckpoint(dotNetMachineLearningContext);
@@ -53,10 +53,10 @@ namespace MachineLearningPOC.ForestFiresML
             // Add a learning algorithm to the pipeline. e.g.(What type of iris is this?)
             // Assign numeric values to text in the "Label" column,
             // because only numbers can be processed during model training.
-            pipeLine = pipeLine.Append(dotNetMachineLearningContext.MulticlassClassification.Trainers.SdcaMaximumEntropy(labelColumnName: "WeekDay", featureColumnName: "RH"));
+            pipeLine = pipeLine.Append(dotNetMachineLearningContext.MulticlassClassification.Trainers.SdcaMaximumEntropy(labelColumnName: "WeekDay", featureColumnName: "Features"));
 
             // Convert the Label back into original text (after converting to number in step 3)
-            pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+            pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Conversion.MapKeyToValue("PredictedWeekDays"));
 
             return pipeLine;
         }

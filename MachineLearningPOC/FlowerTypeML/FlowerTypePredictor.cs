@@ -23,32 +23,6 @@ namespace MachineLearningPOC.FlowertTypeML
             this.PredictedLabels = prediction.PredictedLabels;
         }
 
-        private IEstimator<ITransformer> SetUpLearningModel()
-        {
-            // transform your data
-            IEstimator<ITransformer> pipeLine = dotNetMachineLearningContext.Transforms.Conversion.MapValueToKey("Label");
-            pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Concatenate("Features", "SepalLength", "SepalWidth", "PetalLength", "PetalWidth"));
-
-            //// add a learner
-            pipeLine = pipeLine.AppendCacheCheckpoint(dotNetMachineLearningContext);
-
-            //// Add a learning algorithm to the pipeline. e.g.(What type of iris is this?)
-            //// Assign numeric values to text in the "Label" column,
-            //// because only numbers can be processed during model training.
-            pipeLine = pipeLine.Append(dotNetMachineLearningContext.MulticlassClassification.Trainers.SdcaMaximumEntropy(labelColumnName: "Label", featureColumnName: "Features"));
-
-            //// Convert the Label back into original text (after converting to number in step 3)
-            pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
-
-            return pipeLine;
-        }
-
-        private static ITransformer Train(IDataView trainingDataView, IEstimator<ITransformer> pipeLine)
-        {
-            // Train your model based on the data set
-            return pipeLine.Fit(trainingDataView);
-        }
-
         private IrisPrediction PredictBasedOnTheModel(ITransformer model)
         {
             // Use your model to make a prediction
@@ -61,6 +35,32 @@ namespace MachineLearningPOC.FlowertTypeML
                     PetalLength = 0.2f,
                     PetalWidth  = 5.1f,
                 });
+        }
+
+        private static ITransformer Train(IDataView trainingDataView, IEstimator<ITransformer> pipeLine)
+        {
+            // Train your model based on the data set
+            return pipeLine.Fit(trainingDataView);
+        }
+
+        private IEstimator<ITransformer> SetUpLearningModel()
+        {
+            // transform your data
+            IEstimator<ITransformer> pipeLine = dotNetMachineLearningContext.Transforms.Conversion.MapValueToKey("Label");
+            pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Concatenate("Features", "SepalLength", "SepalWidth", "PetalLength", "PetalWidth"));
+
+            pipeLine = pipeLine.AppendCacheCheckpoint(dotNetMachineLearningContext);
+
+            //// add a learner
+            //// Add a learning algorithm to the pipeline. e.g.(What type of iris is this?)
+            //// Assign numeric values to text in the "Label" column,
+            //// because only numbers can be processed during model training.
+            pipeLine = pipeLine.Append(dotNetMachineLearningContext.MulticlassClassification.Trainers.SdcaMaximumEntropy(labelColumnName: "Label", featureColumnName: "Features"));
+
+            //// Convert the Label back into original text (after converting to number in step 3)
+            pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+
+            return pipeLine;
         }
 
         private IDataView LoadHistoricDataToLearnThePatternsFrom()
