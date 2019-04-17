@@ -5,7 +5,7 @@ namespace MachineLearningPOC.ForestFiresML
     // IrisPrediction is the result returned from prediction operations
     public class FirePrediction
     {
-        [ColumnName("PredictedWeekDay")]
+        [ColumnName("PredictedLabel")]
         public string PredictedWeekDays;
     }
 }

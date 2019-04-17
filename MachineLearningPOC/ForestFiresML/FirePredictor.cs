@@ -70,7 +70,7 @@ namespace MachineLearningPOC.ForestFiresML
 
             // Convert the Label back into original text (after converting to number in step 3)
             pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Conversion.MapKeyToValue(
-                outputColumnName: "PredictedWeekDay",
+                outputColumnName: "PredictedLabel",
                 inputColumnName: "WeekDay"));
 
             return pipeLine;
