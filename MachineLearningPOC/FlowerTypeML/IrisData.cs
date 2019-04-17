@@ -1,4 +1,5 @@
 ﻿using Microsoft.ML.Data;
+using System;
 
 namespace MachineLearningPOC.FlowertTypeML
 {
@@ -23,5 +24,12 @@ namespace MachineLearningPOC.FlowertTypeML
 
         [LoadColumn(4)]
         public string Label;
+        public override string ToString()
+        {
+            return $"{Environment.NewLine}\tSepalLength:\t{SepalLength}" +
+                $"{Environment.NewLine}\tSepalWidth:\t{SepalWidth}" +
+                $"{Environment.NewLine}\tPetalLength:\t{PetalLength}" +
+                $"{Environment.NewLine}\tPetalWidth:\t{PetalWidth}";
+        }
     }
 }

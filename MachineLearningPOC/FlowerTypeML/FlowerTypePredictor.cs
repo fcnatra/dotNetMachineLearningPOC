@@ -7,6 +7,7 @@ namespace MachineLearningPOC.FlowertTypeML
         private MLContext dotNetMachineLearningContext;
 
         public string PredictedLabels { get; set; } = string.Empty;
+        public IrisData EntryData { get; set; }
 
         public void Predict()
         {
@@ -27,14 +28,17 @@ namespace MachineLearningPOC.FlowertTypeML
         {
             // Use your model to make a prediction
             // You can change these numbers to test different predictions
-            return dotNetMachineLearningContext.Model.CreatePredictionEngine<IrisData, IrisPrediction>(model).Predict(
-                new IrisData()
-                {
-                    SepalLength = 3.3f,
-                    SepalWidth  = 1.6f,
-                    PetalLength = 0.2f,
-                    PetalWidth  = 5.1f,
-                });
+            this.EntryData = new IrisData()
+            {
+                SepalLength = 3.3f,
+                SepalWidth = 1.6f,
+                PetalLength = 0.2f,
+                PetalWidth = 5.1f,
+            };
+            return dotNetMachineLearningContext
+                .Model
+                .CreatePredictionEngine<IrisData, IrisPrediction>(model)
+                .Predict(this.EntryData);
         }
 
         private static ITransformer Train(IDataView trainingDataView, IEstimator<ITransformer> pipeLine)

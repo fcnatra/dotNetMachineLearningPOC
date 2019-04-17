@@ -85,5 +85,21 @@ namespace MachineLearningPOC.ForestFiresML
         /// </summary>
         [LoadColumn(12)]
         public double Area { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Environment.NewLine}\tX:\t{X}" +
+                $"{Environment.NewLine}\tY:\t{Y}" +
+                $"{Environment.NewLine}\tMonth:\t{Month}" +
+                $"{Environment.NewLine}\tFFMC:\t{FFMC}" +
+                $"{Environment.NewLine}\tDMC:\t{DMC}" +
+                $"{Environment.NewLine}\tDC:\t{DC}" +
+                $"{Environment.NewLine}\tISI:\t{ISI}" +
+                $"{Environment.NewLine}\tTemp:\t{Temp}" +
+                $"{Environment.NewLine}\tRH:\t{RH}" +
+                $"{Environment.NewLine}\tWind:\t{Wind}" +
+                $"{Environment.NewLine}\tRain:\t{Rain}" +
+                $"{Environment.NewLine}\tArea:\t{Area}";
+        }
     }
 }

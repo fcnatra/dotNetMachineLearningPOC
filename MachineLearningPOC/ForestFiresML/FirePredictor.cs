@@ -10,6 +10,7 @@ namespace MachineLearningPOC.ForestFiresML
         private MLContext dotNetMachineLearningContext;
 
         public string PredictedWeekDays { get; set; } = string.Empty;
+        public ForestFireData EntryData { get; set; }
 
         public void Predict()
         {
@@ -20,19 +21,31 @@ namespace MachineLearningPOC.ForestFiresML
             FirePrediction prediction = PredictBasedOnTheModel(model);
 
             this.PredictedWeekDays = prediction.PredictedWeekDays;
-
         }
 
         private FirePrediction PredictBasedOnTheModel(ITransformer model)
         {
             // Use your model to make a prediction
             // You can change these numbers to test different predictions
-            return dotNetMachineLearningContext.Model.CreatePredictionEngine<ForestFireData, FirePrediction>(model).Predict(
-                new ForestFireData()
-                {
-                    Temp = 18f,
-                    RH = 33f
-                });
+            this.EntryData = new ForestFireData()
+            {
+                X = 7,
+                Y = 4,
+                Month = "oct",
+                FFMC = 90.6d,
+                DMC = 35.4d,
+                DC = 669.1d,
+                ISI = 6.7d,
+                Temp = 18f,
+                RH = 33f,
+                Wind = 0.9d,
+                Rain = 0d,
+                Area = 0d
+            };
+            return dotNetMachineLearningContext
+                .Model
+                .CreatePredictionEngine<ForestFireData, FirePrediction>(model)
+                .Predict(this.EntryData);
         }
 
         private static ITransformer Train(IDataView trainingDataView, IEstimator<ITransformer> pipeLine)
@@ -54,6 +67,7 @@ namespace MachineLearningPOC.ForestFiresML
             // Assign numeric values to text in the labeled column,
             // because only numbers can be processed during model training.
             pipeLine = pipeLine.Append(dotNetMachineLearningContext.MulticlassClassification.Trainers.SdcaMaximumEntropy(labelColumnName: "WeekDay", featureColumnName: "Features"));
+            //pipeLine = pipeLine.Append(dotNetMachineLearningContext.MulticlassClassification.Trainers.NaiveBayes(labelColumnName: "WeekDay", featureColumnName: "Features"));
 
             // Convert the Label back into original text (after converting to number in step 3)
             pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Conversion.MapKeyToValue(
