@@ -67,7 +67,6 @@ namespace MachineLearningPOC.ForestFiresML
             // Assign numeric values to text in the labeled column,
             // because only numbers can be processed during model training.
             pipeLine = pipeLine.Append(dotNetMachineLearningContext.MulticlassClassification.Trainers.SdcaMaximumEntropy(labelColumnName: "WeekDay", featureColumnName: "Features"));
-            //pipeLine = pipeLine.Append(dotNetMachineLearningContext.MulticlassClassification.Trainers.NaiveBayes(labelColumnName: "WeekDay", featureColumnName: "Features"));
 
             // Convert the Label back into original text (after converting to number in step 3)
             pipeLine = pipeLine.Append(dotNetMachineLearningContext.Transforms.Conversion.MapKeyToValue(
@@ -80,6 +79,7 @@ namespace MachineLearningPOC.ForestFiresML
         private IDataView LoadHistoricDataToLearnThePatternsFrom()
         {
             // Make sure the file is copied to the output folder
+            // IDataViews are lazy, so no actual loading happens here, just schema validation
             IDataView data = dotNetMachineLearningContext
                 .Data
                 .LoadFromTextFile<ForestFireData>(path: "ForestFiresML\\forestfires.csv", hasHeader: false, separatorChar: ',');
